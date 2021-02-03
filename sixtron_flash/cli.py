@@ -19,9 +19,9 @@ def main(device, elf_file, probe):
     if probe == "j-link":
 
         if device.lower().startswith("stm32"):
-            addr = 0x08000000
+            addr = "0x08000000"
         else:
-            addr = 0x0
+            addr = "0x0"
 
         print(elf_file)
 
