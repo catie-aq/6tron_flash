@@ -3,7 +3,7 @@ Tool to flash 6TRON Boards
 
 ## Usage
 ```
-Usage: sixtron_flash [OPTIONS] DEVICE ELF_FILE
+Usage: cli.py [OPTIONS] MCU ELF
 
   Console script for sixtron_flash.
 

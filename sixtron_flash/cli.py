@@ -7,8 +7,8 @@ import os
 
 
 @click.command()
-@click.argument('device', nargs=1)
-@click.argument('elf_file', type=click.Path(exists=True))
+@click.argument('mcu', nargs=1)
+@click.argument('elf', type=click.Path(exists=True))
 @click.option('-p', '--probe', default="j-link", type=click.Choice(['j-link', 'st-link']))
 def main(device, elf_file, probe):
     """Console script for sixtron_flash."""
