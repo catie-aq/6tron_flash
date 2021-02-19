@@ -10,7 +10,7 @@ import os
 @click.argument('mcu', nargs=1)
 @click.argument('elf', type=click.Path(exists=True))
 @click.option('-p', '--probe', default="j-link", type=click.Choice(['j-link', 'st-link']))
-def main(device, elf_file, probe):
+def main(mcu, elf, probe):
     """Console script for sixtron_flash."""
     click.echo("6TRON Flash Tool")
     
@@ -18,14 +18,14 @@ def main(device, elf_file, probe):
 
     if probe == "j-link":
 
-        if device.lower().startswith("stm32"):
+        if mcu.lower().startswith("stm32"):
             addr = "0x08000000"
         else:
             addr = "0x0"
 
-        print(elf_file)
+        print(elf)
 
-        elf_path = os.path.abspath(elf_file).replace("\\","/").replace(".elf",".bin")
+        elf_path = os.path.abspath(elf).replace("\\","/").replace(".elf",".bin")
 
         # Create the JLink command file
         command_file_content = ("si 1\n"
@@ -46,7 +46,7 @@ def main(device, elf_file, probe):
             executable = 'JLink.exe'
         else:
             executable = 'JLinkExe'
-        cmd = executable + ' -Device {} -if JTAG -CommanderScript {} '.format(device, command_path)
+        cmd = executable + ' -Device {} -if JTAG -CommanderScript {} '.format(mcu, command_path)
         ret = os.system(cmd)
         if ret != 0:
             if os.name == 'nt':
@@ -57,9 +57,9 @@ def main(device, elf_file, probe):
         os.remove(command_path)
 
     if probe == "st-link":
-        elf_path = os.path.abspath(elf_file).replace("\\","/")
+        elf_path = os.path.abspath(elf).replace("\\","/")
 
-        if "STM32L4" in device:
+        if "STM32L4" in mcu:
             openocd_cli_args = " -f interface/stlink-v2-1.cfg -c \"transport select hla_swd\"\
                     -f target/stm32l4x.cfg -c \"reset_config srst_only srst_nogate\""
 
