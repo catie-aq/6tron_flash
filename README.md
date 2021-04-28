@@ -1,5 +1,5 @@
 # 6TRON Flash
-Tool to flash 6TRON Boards
+Tool to flash 6TRON boards.
 
 ## Usage
 ```
@@ -14,12 +14,12 @@ Options:
 
 ## 6TRON Boards
 
-| Target                | JLink device  |
-|-----------------------|---------------|
-| ZEST_CORE_STM32L4A6RG | stm32l4a6rg   |
-| ZEST_CORE_STM32L496RG | stm32l496rg   |
-| ZEST_CORE_STM32G474VE | stm32g474ve   |
-| ZEST_CORE_MTXDOT      | stm32l496rg   |
-| ZEST_CORE_nRF52832    | nrf52832_xxaa |
-| Z_MOTION              | stm32l496rg   |
-| Z_ENVIRONMENT         | stm32l496rg   |
+| Board                  | Target                | JLink device  |
+|------------------------|-----------------------|---------------|
+| Zest_Core_STM32L4A6RG  | ZEST_CORE_STM32L4A6RG | stm32l4a6rg   |
+| Zest_Core_STGM32L496RG | ZEST_CORE_STM32L496RG | stm32l496rg   |
+| Zest_Core_STM32G474VE  | ZEST_CORE_STM32G474VE | stm32g474ve   |
+| Zest_Core_MTXDOT       | ZEST_CORE_MTXDOT      | stm32l496rg   |
+| Zest_Core_nRF52832     | ZEST_CORE_NRF52832    | nrf52832_xxaa |
+| Z_Motion               | Z_MOTION              | stm32l496rg   |
+| Z_Environment          | Z_ENVIRONMENT         | stm32l496rg   |
