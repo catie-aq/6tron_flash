@@ -3,12 +3,12 @@ Tool to flash 6TRON boards.
 
 ## Usage
 ```
-Usage: cli.py [OPTIONS] MCU ELF
+Usage: sixtron_flash [OPTIONS] JLINK_DEVICE ELF_FILE
 
-  Console script for sixtron_flash.
+  Console tool to flash 6TRON boards.
 
 Options:
-  -p, --probe [j-link|st-link]
+  -p, --probe [j-link|st-link] [default: j-link]
   --help                        Show this message and exit.
 ```
 
