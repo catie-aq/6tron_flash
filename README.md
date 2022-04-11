@@ -1,14 +1,30 @@
 # 6TRON Flash
 Tool to flash 6TRON boards.
 
-## Usage
+## Install
+### Pip
+With `pip`, install with:
+```shell
+python3 -m pip install git+https://gitlab.com/catie_6tron/6tron-flash.git#egg=sixtron_flash
 ```
-Usage: cli.py [OPTIONS] MCU ELF
 
-  Console script for sixtron_flash.
+### Pipx
+[Pipx](https://pypa.github.io/pipx/) allows to install and run Python applications in
+isolated environments.
+
+With `Pipx`, install with:
+```shell
+pipx install git+https://gitlab.com/catie_6tron/6tron-flash.git#egg=sixtron_flash
+```
+
+## Usage
+```shell
+Usage: sixtron_flash [OPTIONS] JLINK_DEVICE ELF_FILE
+
+  Console tool to flash 6TRON boards.
 
 Options:
-  -p, --probe [j-link|st-link]
+  -p, --probe [j-link|st-link] [default: j-link]
   --help                        Show this message and exit.
 ```
 
