@@ -32,7 +32,7 @@ def main(mcu, elf, probe):
                                 "speed 4000\n"
                                 "r\n"
                                 "h\n"
-                                "loadfile {},{}\n"
+                                "loadfile \"{}\",{}\n"
                                 "r\n"
                                 "q\n").format(elf_path, addr)
         command_file = open(os.path.join(script_dirname, "jlink_command_file.jlink").replace("\\", "/"), 'w')
@@ -46,7 +46,7 @@ def main(mcu, elf, probe):
             executable = 'JLink.exe'
         else:
             executable = 'JLinkExe'
-        cmd = executable + ' -Device {} -if JTAG -CommanderScript {} '.format(mcu, command_path)
+        cmd = executable + ' -Device {} -if JTAG -CommanderScript \"{}\" '.format(mcu, command_path)
         ret = os.system(cmd)
         if ret != 0:
             if os.name == 'nt':
