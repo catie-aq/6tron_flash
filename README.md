@@ -34,6 +34,7 @@ Options:
 |------------------------|-----------------------|---------------|
 | Z_Environment          | Z_ENVIRONMENT         | stm32l496rg   |
 | Z_Motion               | Z_MOTION              | stm32l496rg   |
+| Zest_Core_FMLR-72      | ZEST_CORE_FMLR-72     | stm32l071rz   |
 | Zest_Core_MTXDOT       | ZEST_CORE_MTXDOT      | stm32l151cc   |
 | Zest_Core_STM32G474VE  | ZEST_CORE_STM32G474VE | stm32g474ve   |
 | Zest_Core_STM32H753ZI  | ZEST_CORE_STM32H753ZI | STM32h753zi   |
