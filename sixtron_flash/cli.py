@@ -8,7 +8,7 @@ import os
 
 @click.command()
 @click.argument("JLINK_DEVICE", nargs=1)
-@click.argument("ELF_FILE", type=click.Path(exists=True))
+@click.argument("FILE_PATH", type=click.Path(exists=True))
 @click.option(
     "-p",
     "--probe",
@@ -16,11 +16,15 @@ import os
     type=click.Choice(["j-link", "st-link"]),
     show_default=True,
 )
-def main(jlink_device, elf_file, probe):
+def main(jlink_device, file_path, probe):
     """Console tool to flash 6TRON boards."""
     click.echo("6TRON Flash Tool")
 
     script_dirname = os.path.dirname(os.path.abspath(__file__))
+
+    file_path = os.path.abspath(file_path).replace("\\", "/")
+
+    print("[sixtron_flash] Fash {}".format(file_path))
 
     if probe == "j-link":
 
@@ -28,10 +32,6 @@ def main(jlink_device, elf_file, probe):
             addr = "0x08000000"
         else:
             addr = "0x0"
-
-        print(elf_file)
-
-        elf_path = os.path.abspath(elf_file).replace("\\", "/").replace(".elf", ".bin")
 
         # Create the JLink command file
         # fmt: off
@@ -43,7 +43,7 @@ def main(jlink_device, elf_file, probe):
             "loadfile \"{}\",{}\n"
             "r\n"
             "q\n"
-        ).format(elf_path, addr)
+        ).format(file_path, addr)
         # fmt: on
         command_file = open(
             os.path.join(script_dirname, "jlink_command_file.jlink").replace("\\", "/"),
@@ -61,9 +61,11 @@ def main(jlink_device, elf_file, probe):
             executable = "JLink.exe"
         else:
             executable = "JLinkExe"
-        cmd = executable + " -Device {} -if JTAG -CommanderScript \"{}\" ".format(
-            jlink_device, command_path
+        # fmt: off
+        cmd = "{} -Device {} -if JTAG -CommanderScript \"{}\" ".format(
+            executable, jlink_device, command_path
         )
+        # fmt: on
         ret = os.system(cmd)
         if ret != 0:
             if os.name == "nt":
@@ -78,7 +80,6 @@ def main(jlink_device, elf_file, probe):
         os.remove(command_path)
 
     if probe == "st-link":
-        elf_path = os.path.abspath(elf_file).replace("\\", "/")
 
         if "STM32L4" in jlink_device:
             openocd_cli_args = ' -f interface/stlink-v2-1.cfg -c "transport select hla_swd"\
@@ -88,7 +89,7 @@ def main(jlink_device, elf_file, probe):
             cmd = (
                 "openocd"
                 + openocd_cli_args
-                + ' -c "program {} verify reset exit"'.format(elf_path)
+                + ' -c "program {} verify reset exit"'.format(file_path)
             )
             ret = os.system(cmd)
             if ret != 0:
@@ -106,7 +107,7 @@ def main(jlink_device, elf_file, probe):
 
             # Flash target
             cmd = 'openocd -f openocd.cfg -c "program {} verify reset exit"'.format(
-                elf_path
+                file_path
             )
             ret = os.system(cmd)
             if ret != 0:
