@@ -28,7 +28,7 @@ def main(jlink_device, file_path, probe):
 
     if file_path is not None:
         file_path = os.path.abspath(file_path).replace("\\", "/")
-    else:
+    elif pathlib.Path(".mbed").exists():
         with open(".mbed", "r") as f:
             for key, value in [line.split("=") for line in f]:
                 config[key] = value.strip().upper()
@@ -59,6 +59,9 @@ def main(jlink_device, file_path, probe):
                 else:
                     click.echo("Target not found")
                     return
+    else:
+        click.echo("Mbed OS project not found")
+        return
 
     click.echo("Flash: {}".format(file_path))
 
