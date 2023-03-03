@@ -33,19 +33,17 @@ def main(jlink_device, file_path, probe):
             for key, value in [line.split("=") for line in f]:
                 config[key] = value.strip().upper()
 
-        binary_name = ""
-
         if pathlib.Path("mbed_app.json"):
             with open("mbed_app.json", "r") as f:
                 mbed_app = json.load(f)
                 if "artifact_name" in mbed_app:
-                    binary_name = mbed_app["artifact_name"]
+                    config["FILE"] = mbed_app["artifact_name"]
 
-        if binary_name == "":
-            binary_name = pathlib.Path(pathlib.Path().absolute()).parts[-1]
+        if not "FILE" in config:
+            config["FILE"] = pathlib.Path(pathlib.Path().absolute()).parts[-1]
 
         file_path = "BUILD/{}/{}/{}.bin".format(
-            config["TARGET"], config["TOOLCHAIN"], binary_name
+            config["TARGET"], config["TOOLCHAIN"], config["FILE"]
         )
 
         if pathlib.Path("custom_targets.json").exists():
