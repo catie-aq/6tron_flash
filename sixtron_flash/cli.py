@@ -3,12 +3,14 @@
 """Console script for sixtron_flash."""
 import sys
 import click
+import pathlib
 import os
+import json
 
 
 @click.command()
-@click.argument("JLINK_DEVICE", nargs=1)
-@click.argument("FILE_PATH", type=click.Path(exists=True))
+@click.argument("JLINK_DEVICE", nargs=1, required=False)
+@click.argument("FILE_PATH", type=click.Path(exists=True), required=False)
 @click.option(
     "-p",
     "--probe",
@@ -22,7 +24,32 @@ def main(jlink_device, file_path, probe):
 
     script_dirname = os.path.dirname(os.path.abspath(__file__))
 
-    file_path = os.path.abspath(file_path).replace("\\", "/")
+    config = {}
+
+    if file_path is not None:
+        file_path = os.path.abspath(file_path).replace("\\", "/")
+    else:
+        with open(".mbed", "r") as f:
+            for key, value in [line.split("=") for line in f]:
+                config[key] = value.strip()
+
+        file_path = "BUILD/{}/GCC_ARM/{}.bin".format(
+            config["TARGET"], config["TOOLCHAIN"]
+        )
+
+        if pathlib.Path("custom_targets.json").exists():
+            with open("custom_targets.json", "r") as f:
+                custom_target = json.load(f)
+            if config["TARGET"] in custom_target:
+                jlink_device = custom_target[config["TARGET"]]["device_name"]
+            else:
+                with open("mbed-os/targets/targets.json", "r") as f:
+                    mbed_target = json.load(f)
+                if config["TARGET"] in mbed_target:
+                    jlink_device = mbed_target[config["TARGET"]]["device_name"]
+                else:
+                    click.echo("Target not found")
+                    return
 
     click.echo("Flash: {}".format(file_path))
 
@@ -103,7 +130,9 @@ def main(jlink_device, file_path, probe):
                     )
 
         else:  # use the config file of the project
-            click.echo("Unknown device, using openocd.cfg configuration file of the project")
+            click.echo(
+                "Unknown device, using openocd.cfg configuration file of the project"
+            )
 
             # Flash target
             cmd = 'openocd -f openocd.cfg -c "program {} verify reset exit"'.format(
