@@ -31,10 +31,21 @@ def main(jlink_device, file_path, probe):
     else:
         with open(".mbed", "r") as f:
             for key, value in [line.split("=") for line in f]:
-                config[key] = value.strip()
+                config[key] = value.strip().upper()
 
-        file_path = "BUILD/{}/GCC_ARM/{}.bin".format(
-            config["TARGET"], config["TOOLCHAIN"]
+        binary_name = ""
+
+        if pathlib.Path("mbed_app.json"):
+            with open("mbed_app.json", "r") as f:
+                mbed_app = json.load(f)
+                if "artifact_name" in mbed_app:
+                    binary_name = mbed_app["artifact_name"]
+
+        if binary_name == "":
+            binary_name = pathlib.Path(pathlib.Path().absolute()).parts[-1]
+
+        file_path = "BUILD/{}/{}/{}.bin".format(
+            config["TARGET"], config["TOOLCHAIN"], binary_name
         )
 
         if pathlib.Path("custom_targets.json").exists():
