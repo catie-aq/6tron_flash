@@ -19,7 +19,7 @@ pipx install git+https://gitlab.com/catie_6tron/6tron-flash.git#egg=sixtron_flas
 
 ## Usage
 ```shell
-Usage: sixtron_flash [OPTIONS] JLINK_DEVICE FILE_PATH
+Usage: sixtron_flash [OPTIONS] [JLINK_DEVICE] [FILE_PATH]
 
   Console tool to flash 6TRON boards.
 
