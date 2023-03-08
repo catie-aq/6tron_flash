@@ -31,7 +31,6 @@ Usage: sixtron_flash [OPTIONS] [JLINK_DEVICE] [FILE_PATH]
   Console tool to flash 6TRON boards.
 
 Options:
-  -p, --probe [j-link|st-link] [default: j-link]
   --help                        Show this message and exit.
 ```
 
