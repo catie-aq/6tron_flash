@@ -62,7 +62,7 @@ def main(jlink_device, file_path, probe):
         else:
             executable = "JLinkExe"
         # fmt: off
-        cmd = "{} -Device {} -if JTAG -ExitOnError 1 -NoGui 1 -CommanderScript \"{}\" ".format(
+        cmd = "{} -Device {} -if JTAG -ExitOnError 1 -NoGui 1 -CommandFile \"{}\" ".format(
             executable, jlink_device, command_path
         )
         # fmt: on
