@@ -70,11 +70,11 @@ def main(jlink_device, file_path, probe):
         if ret != 0:
             if os.name == "nt":
                 click.echo(
-                    "Error when calling J-Link executable. Please verify that JLink.exe has been added to the PATH"
+                    "Error when running J-Link executable. Please verify that a J-Link probe is connected, and that JLink.exe has been added to the PATH"
                 )
             elif os.name == "posix":
                 click.echo(
-                    "Error when calling J-Link executable. Please verify that JLinkEXE has been added to the PATH"
+                    "Error when running J-Link executable. Please verify that a J-Link probe is connected, and that JLinkExe has been added to the PATH"
                 )
 
         os.remove(command_path)
