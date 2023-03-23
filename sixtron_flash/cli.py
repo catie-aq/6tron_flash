@@ -75,8 +75,6 @@ def main(jlink_device, file_path, probe):
         # Create the JLink command file
         # fmt: off
         command_file_content = (
-            "si 1\n"
-            "speed 4000\n"
             "r\n"
             "h\n"
             "loadfile \"{}\",{}\n"
