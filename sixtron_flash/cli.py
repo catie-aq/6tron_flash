@@ -9,8 +9,8 @@ import json
 
 
 @click.command()
-@click.argument("JLINK_DEVICE", nargs=1)
-@click.argument("FILE_PATH", type=click.Path(exists=True))
+@click.argument("JLINK_DEVICE", nargs=1, required=False)
+@click.argument("FILE_PATH", type=click.Path(exists=True), required=False)
 def main(jlink_device, file_path):
     """Console tool to flash 6TRON boards."""
     click.echo("6TRON Flash Tool")
@@ -66,8 +66,6 @@ def main(jlink_device, file_path):
     # Create the JLink command file
     # fmt: off
     command_file_content = (
-        "si 1\n"
-        "speed 4000\n"
         "r\n"
         "h\n"
         "loadfile \"{}\",{}\n"
@@ -75,16 +73,10 @@ def main(jlink_device, file_path):
         "q\n"
     ).format(file_path, addr)
     # fmt: on
-    command_file = open(
-        os.path.join(script_dirname, "jlink_command_file.jlink").replace("\\", "/"),
-        "w",
-    )
+    command_path = os.path.join(script_dirname, "jlink_command_file.jlink").replace("\\", "/")
+    command_file = open(command_path, "w")
     command_file.write(command_file_content)
     command_file.close()
-
-    command_path = os.path.join(script_dirname, "jlink_command_file.jlink").replace(
-        "\\", "/"
-    )
 
     # Flash target
     if os.name == "nt":
@@ -92,7 +84,7 @@ def main(jlink_device, file_path):
     else:
         executable = "JLinkExe"
     # fmt: off
-    cmd = "{} -Device {} -if JTAG -ExitOnError 1 -NoGui 1 -CommandFile \"{}\" ".format(
+    cmd = "{} -Device {} -if SWD -Speed 4000 -ExitOnError 1 -NoGui 1 -CommandFile \"{}\" ".format(
         executable, jlink_device, command_path
     )
     # fmt: on
