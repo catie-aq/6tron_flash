@@ -22,11 +22,13 @@ def main(jlink_device, file_path):
     if file_path is not None:
         file_path = os.path.abspath(file_path).replace("\\", "/")
     elif pathlib.Path(".mbed").exists():
+        click.echo("  No argument provided: finding binary automatically...")
+    	
         with open(".mbed", "r") as f:
             for key, value in [line.split("=") for line in f]:
                 config[key] = value.strip().upper()
 
-        if pathlib.Path("mbed_app.json"):
+        if pathlib.Path("mbed_app.json").exists():
             with open("mbed_app.json", "r") as f:
                 mbed_app = json.load(f)
                 if "artifact_name" in mbed_app:
@@ -38,6 +40,13 @@ def main(jlink_device, file_path):
         file_path = "BUILD/{}/{}/{}.bin".format(
             config["TARGET"], config["TOOLCHAIN"], config["FILE"]
         )
+        
+        
+        if not pathlib.Path(file_path).exists():
+            click.echo("  Binary file not found. Please provide a target and a path")
+            return
+        else:
+    	    click.echo(f"  Found binary at {file_path}")
 
         if pathlib.Path("custom_targets.json").exists():
             with open("custom_targets.json", "r") as f:
