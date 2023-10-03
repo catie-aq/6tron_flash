@@ -44,5 +44,5 @@ setup(
     name='sixtron_flash',
     packages=find_packages(include=['sixtron_flash', 'sixtron_flash.*']),
     setup_requires=setup_requirements,
-    version='0.1.0'
+    version='1.0.0'
 )
