@@ -11,7 +11,7 @@ import json
 @click.command()
 @click.argument("JLINK_DEVICE", nargs=1, required=False)
 @click.argument("FILE_PATH", type=click.Path(exists=True), required=False)
-@click.option('-j', '--jlink_probe', help='J-Link probe nickname or serial number')
+@click.option('-j', '--jlink-probe', help='J-Link probe nickname or serial number')
 def main(jlink_probe, jlink_device, file_path):
     """Console tool to flash 6TRON boards."""
     click.echo("6TRON Flash Tool")
