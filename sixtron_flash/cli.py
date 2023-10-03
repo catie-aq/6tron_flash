@@ -99,7 +99,6 @@ def main(jlink_probe, jlink_device, file_path):
         executable = "JLinkExe"
     # fmt: off
     cmd = f"{probe} -if SWD -Speed 4000 -ExitOnError 1 -NoGui 1 -CommandFile \"{command_path}\" -Device {jlink_device} {executable}"
-    )
     # fmt: on
     ret = os.system(cmd)
     if ret != 0:
