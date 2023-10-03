@@ -11,7 +11,8 @@ import json
 @click.command()
 @click.argument("JLINK_DEVICE", nargs=1, required=False)
 @click.argument("FILE_PATH", type=click.Path(exists=True), required=False)
-def main(jlink_device, file_path):
+@click.option('-j', '--jlink_probe')
+def main(jlink_device, jlink_probe, file_path):
     """Console tool to flash 6TRON boards."""
     click.echo("6TRON Flash Tool")
 
@@ -23,7 +24,7 @@ def main(jlink_device, file_path):
         file_path = os.path.abspath(file_path).replace("\\", "/")
     elif pathlib.Path(".mbed").exists():
         click.echo("  No argument provided: finding binary automatically...")
-    	
+
         with open(".mbed", "r") as f:
             for key, value in [line.split("=") for line in f]:
                 config[key] = value.strip().upper()
@@ -40,13 +41,12 @@ def main(jlink_device, file_path):
         file_path = "BUILD/{}/{}/{}.bin".format(
             config["TARGET"], config["TOOLCHAIN"], config["FILE"]
         )
-        
-        
+
         if not pathlib.Path(file_path).exists():
             click.echo("  Binary file not found. Please provide a target and a path")
             return
         else:
-    	    click.echo(f"  Found binary at {file_path}")
+            click.echo(f"  Found binary at {file_path}")
 
         if pathlib.Path("custom_targets.json").exists():
             with open("custom_targets.json", "r") as f:
@@ -87,14 +87,19 @@ def main(jlink_device, file_path):
     command_file.write(command_file_content)
     command_file.close()
 
+    if jlink_probe is not None:
+        probe = "-USB " + jlink_probe
+    else:
+        probe = ""
+
     # Flash target
     if os.name == "nt":
         executable = "JLink.exe"
     else:
         executable = "JLinkExe"
     # fmt: off
-    cmd = "{} -Device {} -if SWD -Speed 4000 -ExitOnError 1 -NoGui 1 -CommandFile \"{}\" ".format(
-        executable, jlink_device, command_path
+    cmd = "{} -Device {} {} -if SWD -Speed 4000 -ExitOnError 1 -NoGui 1 -CommandFile \"{}\" ".format(
+        executable, jlink_device, probe, command_path
     )
     # fmt: on
     ret = os.system(cmd)
