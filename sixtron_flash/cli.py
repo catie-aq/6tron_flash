@@ -11,9 +11,10 @@ import json
 @click.command()
 @click.argument("JLINK_DEVICE", nargs=1, required=False)
 @click.argument("FILE_PATH", type=click.Path(exists=True), required=False)
+@click.option('-ip', '--jlink-server-ip', help='J-Link remote server IP (will discard jlink-probe option)')
 @click.option('-j', '--jlink-probe', help='J-Link probe nickname or serial number')
 @click.version_option()
-def main(jlink_probe, jlink_device, file_path):
+def main(jlink_server_ip, jlink_probe, jlink_device, file_path):
     """Console tool to flash 6TRON boards."""
     click.echo("6TRON Flash Tool")
 
@@ -88,7 +89,9 @@ def main(jlink_probe, jlink_device, file_path):
     command_file.write(command_file_content)
     command_file.close()
 
-    if jlink_probe:
+    if jlink_server_ip:
+        probe = f"-IP {jlink_server_ip}"
+    elif jlink_probe:
         probe = f"-USB {jlink_probe}"
     else:
         probe = ""
