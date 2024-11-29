@@ -18,8 +18,6 @@ def main(jlink_server_ip, jlink_probe, jlink_device, file_path):
     """Console tool to flash 6TRON boards."""
     click.echo("6TRON Flash Tool")
 
-    script_dirname = os.path.dirname(os.path.abspath(__file__))
-
     config = {}
 
     if file_path is not None:
@@ -84,7 +82,9 @@ def main(jlink_server_ip, jlink_probe, jlink_device, file_path):
         "q\n"
     ).format(file_path, addr)
     # fmt: on
-    command_path = os.path.join(script_dirname, "jlink_command_file.jlink").replace("\\", "/")
+
+    command_dirname = os.path.dirname(os.path.abspath(file_path))
+    command_path = os.path.join(command_dirname, "jlink_command_file.jlink").replace("\\", "/")
     command_file = open(command_path, "w")
     command_file.write(command_file_content)
     command_file.close()
